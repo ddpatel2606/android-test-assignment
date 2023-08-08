@@ -11,5 +11,5 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 abstract class RepositoryModule {
     @Binds
-    abstract fun bindMovieRepository(repository: ShackleRepositoryImpl): ShackleRepository
+    abstract fun bindShackleRepository(repository: ShackleRepositoryImpl): ShackleRepository
 }

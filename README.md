@@ -42,6 +42,12 @@ ScreenShot 1               |  ScreenShot 2
 ## Demo App Structure
 <img src="appImages/app_package_structure.png" width="350"/>
 
+- androidTest (Instrumentation Tests Compose UI, Espresso and Hilt Test Lib)
+- debug (HiltTestActivity for UI tests)
+- main
+- sharedTest (directory act as bridge between unit and instrumentation tests. It contains files like Fake Hilt Modules, fake Repository, Hilt Test Runner)
+- test (Unittest cases Robolectric, Mockito and Hilt)
+
 The project is structured into three distinct layers that have been designed to address concerns related to Separation of Concerns and Testability.
 - Data
 - Presentation

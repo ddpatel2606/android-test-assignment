@@ -12,10 +12,10 @@
     <string name="check_out_date">Check-out date</string>
     <string name="check_in_date">Check-in date</string>
     <string name="select_guests_date_and_time">Select guests,\ndate and time</string>
-    <string name="checkedoutimage">checkedOutImage</string>
-    <string name="checkedinimage">checkedInImage</string>
-    <string name="adultsimage">adultsImage</string>
-    <string name="childrenimage">childrenImage</string>
+    <string name="content_desc_checkedoutimage">checkedOutImage</string>
+    <string name="content_desc_checkedinimage">checkedInImage</string>
+    <string name="content_desc_adultsimage">adultsImage</string>
+    <string name="content_desc_childrenimage">childrenImage</string>
     <string name="recent_searches">Recent Searches</string>
     <string name="please_enter_valid_information">Please enter valid information</string>
     <string name="search">Search</string>
