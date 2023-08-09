@@ -1,9 +1,9 @@
 # android-test-assignment
 Template project for Shackle Android interview assignment
 
-ScreenShot 1               |  ScreenShot 2
-:-------------------------:|:-------------------------:
-![](appImages/1.png)  |  ![](appImages/2.png)
+ScreenShot 1               |  ScreenShot 2             |  ScreenShot 3
+:-------------------------:|:-------------------------:|:-------------------------:
+![](appImages/1.png)  |  ![](appImages/2.png) |  ![](appImages/3.png)
 
 ### Tech stack & Open-source libraries
 - Minimum SDK level 24 to latest
