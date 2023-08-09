@@ -20,4 +20,5 @@
     <string name="please_enter_valid_information">Please enter valid information</string>
     <string name="search">Search</string>
     <string name="searchinimage">searchInImage</string>
+    <string name="content_desc_star">star</string>
 </resources>

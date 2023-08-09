@@ -25,8 +25,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -38,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -54,8 +56,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.shacklehotelbuddy.R
 import com.example.shacklehotelbuddy.feature_hotel_search.data.constant.ADULT_TAG
 import com.example.shacklehotelbuddy.feature_hotel_search.data.constant.CHECK_IN_DATE_TAG
@@ -139,17 +143,12 @@ fun SearchQueryScreen(
                     style = ShackleHotelBuddyTheme.typography.bodyHigher,
                     color = ShackleHotelBuddyTheme.colors.white
                 )
-                Box(
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .border(
-                            width = 10.dp, color = ShackleHotelBuddyTheme.colors.white,
-                            shape = RoundedCornerShape(25.dp)
-                        )
-                        .clip(shape = RoundedCornerShape(25.dp, 25.dp, 25.dp, 25.dp))
-                        .background(ShackleHotelBuddyTheme.colors.white)
-                        .padding(16.dp)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = White),
+                    shape = RoundedCornerShape(16.dp),
                 ) {
 
                     Column {
@@ -161,7 +160,9 @@ fun SearchQueryScreen(
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(16.dp)
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.event_upcoming),
@@ -221,7 +222,9 @@ fun SearchQueryScreen(
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(16.dp)
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.event_available),
@@ -282,6 +285,7 @@ fun SearchQueryScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .weight(1f)
+                                    .padding(16.dp)
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.person),
@@ -355,6 +359,7 @@ fun SearchQueryScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .weight(1f)
+                                    .padding(16.dp)
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.supervisor_account),
@@ -422,7 +427,7 @@ fun SearchQueryScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.Transparent)
-                        .absolutePadding(16.dp, 0.dp, 0.dp, 8.dp),
+                        .absolutePadding(16.dp, 12.dp, 0.dp, 8.dp),
                     text = stringResource(R.string.recent_searches),
                     style = ShackleHotelBuddyTheme.typography.bodySemiBoldMedium,
                     color = ShackleHotelBuddyTheme.colors.white
@@ -446,48 +451,41 @@ fun SearchQueryScreen(
                     .weight(0.15f, true),
                 verticalAlignment = Alignment.Bottom
             ) {
-                OutlinedButton(
+
+                Button(colors = ButtonDefaults.buttonColors(containerColor = Teal),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
-                        .border(
-                            width = 0.dp, color = Teal,
-                            shape = RoundedCornerShape(25.dp)
+                        .padding(16.dp)
+                        .height(60.dp).border(
+                            width = 5.dp, color = Teal,
+                            shape = RoundedCornerShape(20.dp)
                         ),
                     onClick = {
-                        focusManager.clearFocus()
-                        if(checkInSelectedDateText.isNotEmpty() &&
-                            checkOutSelectedDateText.isNotEmpty() &&
-                            adultText.isNotEmpty() && childrenText.isNotEmpty()) {
+                    focusManager.clearFocus()
+                    if(checkInSelectedDateText.isNotEmpty() &&
+                        checkOutSelectedDateText.isNotEmpty() &&
+                        adultText.isNotEmpty() && childrenText.isNotEmpty()) {
 
-                            val searchQuery = SearchQuery(
-                                checkedInDate = checkInSelectedDateText,
-                                checkedOutDate = checkOutSelectedDateText,
-                                adults = adultText.toInt(),
-                                children = childrenText.toInt(),
-                                time = System.currentTimeMillis()
-                            )
+                        val searchQuery = SearchQuery(
+                            checkedInDate = checkInSelectedDateText,
+                            checkedOutDate = checkOutSelectedDateText,
+                            adults = adultText.toInt(),
+                            children = childrenText.toInt(),
+                            time = System.currentTimeMillis()
+                        )
 
-                            onSearchClick(searchQuery)
-                        }
-                        else
-                        {
-                            Toast.makeText(context, context.getString(R.string.please_enter_valid_information),
-                                Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    shape = RoundedCornerShape(25), colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Teal,
-                        disabledContentColor = White,
-                        containerColor = Teal,
-                        disabledContainerColor = White
-                    )
-                ) {
+                        onSearchClick(searchQuery)
+                    }
+                    else
+                    {
+                        Toast.makeText(context, context.getString(R.string.please_enter_valid_information),
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }) {
                     Text(
                         text = stringResource(R.string.search),
                         style = ShackleHotelBuddyTheme.typography.bodyBoldMedium,
-                        color = ShackleHotelBuddyTheme.colors.white,
-                        modifier = Modifier.padding(16.dp)
+                        color = ShackleHotelBuddyTheme.colors.white
                     )
                 }
             }
@@ -513,35 +511,31 @@ fun textFieldColors() = OutlinedTextFieldDefaults.colors(
 /**
  * Search Query Item
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchQueryItem(
     task: SearchQuery,
     navController: NavController
 ) {
-    Box(
+    Card(
         modifier = Modifier
+            .absolutePadding(16.dp, 6.dp, 16.dp, 6.dp)
             .fillMaxWidth()
-            .absolutePadding(12.dp, 8.dp, 12.dp, 8.dp)
-            .border(
-                width = 6.dp, color = ShackleHotelBuddyTheme.colors.white,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .clip(shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
-            .background(ShackleHotelBuddyTheme.colors.white)
-            .padding(12.dp)
+            .height(48.dp),
+        colors = CardDefaults.cardColors(containerColor = White),
+        shape = RoundedCornerShape(8.dp),
+        onClick = {
+            navController.currentBackStackEntry?.savedStateHandle?.apply {
+                set("searchQuery", task)
+            }
+            navController.navigate(Screen.PropertiesListScreen.route)
+        }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(30.dp)
-                .clickable {
-
-                    navController.currentBackStackEntry?.savedStateHandle?.apply{
-                        set("searchQuery", task)
-                    }
-                    navController.navigate(Screen.PropertiesListScreen.route)
-                }
+                .absolutePadding(8.dp, 0.dp, 8.dp, 0.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.manage_history),
@@ -573,4 +567,29 @@ private fun SearchQueryItem(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun SearchQueryScreenView() {
+    ShackleHotelBuddyTheme {
+        SearchQueryScreen(
+            rememberNavController(),
+            listOf(),
+            onSearchClick = {
+
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SearchQueryScreenItemView() {
+ShackleHotelBuddyTheme {
+    SearchQueryItem(
+        SearchQuery(2,"2/08/2023","3/08/2023",2,3,4L),
+        rememberNavController()
+    )
+}
 }

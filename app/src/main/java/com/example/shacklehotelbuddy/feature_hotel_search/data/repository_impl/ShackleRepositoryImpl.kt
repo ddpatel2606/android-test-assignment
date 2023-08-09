@@ -47,11 +47,17 @@ open class ShackleRepositoryImpl @Inject constructor(
     ): Resource<PropertyList> = safeApiCall.execute {
         val checkedInDateArray = checkedInDate.split("/")
         val checkedOutDateArray = checkedOutDate.split("/")
+
+        val childList = mutableListOf<Children>()
+        for (i in 1..children){
+            childList.add(Children(DEFAULT_CHILDREN_AGE))
+        }
+
         val propertyEntity = PropertiesListRequestEntity(CheckInOutDate(checkedInDateArray[0].toInt(),checkedInDateArray[1].toInt(),checkedInDateArray[2].toInt()),
             CheckInOutDate(checkedOutDateArray[0].toInt(),checkedOutDateArray[1].toInt(),checkedOutDateArray[2].toInt()),
             DEFAULT_CURRENCY, Destination(DEFAULT_REGION_ID),DEFAULT_EAP_ID, Filters(Price(
                 DEFAULT_MAX_PRICE,DEFAULT_MIN_PRICE)),DEFAULT_LOCALE,DEFAULT_RESULT_SIZE,
-            DEFAULT_RESULT_STARTING_INDEX, listOf(Room(adult, listOf(Children(DEFAULT_CHILDREN_AGE)))),DEFAULT_SITE_ID,DEFAULT_PRICE_SORT)
+            DEFAULT_RESULT_STARTING_INDEX, listOf(Room(adult, childList)),DEFAULT_SITE_ID,DEFAULT_PRICE_SORT)
 
         api.getPropertiesList(propertyEntity).toPropertyList()
     }

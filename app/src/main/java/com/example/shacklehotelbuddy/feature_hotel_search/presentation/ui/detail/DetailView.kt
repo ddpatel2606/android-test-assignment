@@ -3,11 +3,11 @@ package com.example.shacklehotelbuddy.feature_hotel_search.presentation.ui.detai
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +37,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.shacklehotelbuddy.R
 import com.example.shacklehotelbuddy.feature_hotel_search.domain.model.Property
 import com.example.shacklehotelbuddy.ui.theme.ShackleHotelBuddyTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 /**
@@ -134,14 +138,9 @@ fun PropertyItem(
     property: Property
 ) {
     val imageSize = 200.dp
-    Box(
-        modifier = Modifier.padding(16.dp)
-    ) {
-
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth().padding(16.dp),
         ) {
             GlideImage(
                 model = property.propertyImage,
@@ -149,63 +148,63 @@ fun PropertyItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(imageSize)
-                    .clip(RoundedCornerShape(12.dp)),
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             ) {
                 it.error(R.drawable.ic_baseline_image)
             }
-            Column(
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .padding(end = 32.dp),
-                verticalArrangement = Arrangement.Bottom
+                    .fillMaxWidth()
+                    .absolutePadding(0.dp,8.dp,0.dp,8.dp)
             ) {
-                Text(
-                    text = property.name ?: "",
-                    style = ShackleHotelBuddyTheme.typography.bodyMedium,
-                    color = ShackleHotelBuddyTheme.colors.black,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = property.locationName ?: "",
-                    style = ShackleHotelBuddyTheme.typography.bodyMedium,
-                    color = ShackleHotelBuddyTheme.colors.grayText,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = property.priceString ?: "",
-                    style = ShackleHotelBuddyTheme.typography.bodyMedium,
-                    color = ShackleHotelBuddyTheme.colors.black,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.star),
-                        contentDescription = "star",
-                        modifier = Modifier
-                            .height(20.dp)
-                            .width(20.dp)
-                    )
                     Text(
-                        modifier = Modifier
-                            .background(Color.Transparent),
-                        text = "4.5",
+                        text = property.name ?: "",
+                        style = ShackleHotelBuddyTheme.typography.bodyMediumBold,
+                        color = ShackleHotelBuddyTheme.colors.black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Text(
+                        text = property.locationName ?: "",
                         style = ShackleHotelBuddyTheme.typography.bodyMedium,
-                        color = ShackleHotelBuddyTheme.colors.black
+                        color = ShackleHotelBuddyTheme.colors.grayText,
+                        maxLines = 10,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Text(
+                        text = property.priceString ?: "",
+                        style = ShackleHotelBuddyTheme.typography.bodyMediumBold,
+                        color = ShackleHotelBuddyTheme.colors.black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
+                    Row {
+                        Image(
+                            painter = painterResource(id = R.drawable.star),
+                            contentDescription = stringResource(R.string.content_desc_star),
+                            modifier = Modifier
+                                .height(20.dp)
+                                .width(20.dp)
+                        )
+                        Text(
+                            modifier = Modifier
+                                .background(Color.Transparent),
+                            text = "4.5",
+                            style = ShackleHotelBuddyTheme.typography.bodyMedium,
+                            color = ShackleHotelBuddyTheme.colors.black
+                        )
+                    }
             }
         }
-    }
 }
 
 
@@ -217,8 +216,6 @@ fun PropertyItem(
 fun TopAppBarView(navController: NavController) {
     CenterAlignedTopAppBar(
         title = { TopAppBarTitleText() },
-        modifier = Modifier
-            .padding(8.dp),
         navigationIcon = {
             IconButton(onClick = {
                 navController.popBackStack()
@@ -241,4 +238,24 @@ fun TopAppBarTitleText() {
         color = Color.Black,
         style = ShackleHotelBuddyTheme.typography.bodySemiBoldMedium
     )
+}
+
+@Preview
+@Composable
+private fun DetailViewPreview() {
+    ShackleHotelBuddyTheme {
+        DetailView(
+            rememberNavController(),
+            MutableStateFlow(listOf(Property("test","test","https://tinyurl.com/2bbjhyrr","$105 night","La, us","4.5"))).collectAsState(),
+            MutableStateFlow(true).collectAsState()
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DetailItemView() {
+    ShackleHotelBuddyTheme {
+        PropertyItem(Property("test","test","https://tinyurl.com/2bbjhyrr","$105 night","La, us","4.5"))
+    }
 }
